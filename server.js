@@ -2,7 +2,6 @@ const { createServer } = require("http");
 const { parse } = require("url");
 const next = require("next");
 
-
 const dev = process.env.NODE_ENV !== "production";
 const app = next({ dev });
 const handle = app.getRequestHandler();
@@ -13,7 +12,17 @@ app.prepare().then(() => {
     const { pathname, query } = parsedUrl;
 
     if (pathname.match(/^\/notice/)) {
-      app.render(req, res, "/notice", Object.assign({id:pathname.replace(/^\/notice\//, '')}, query));
+      app.render(
+        req,
+        res,
+        "/notice/" + pathname.replace(/^\/notice\/(.*?)\/.*$/, "$1"),
+        Object.assign(
+          {
+            id: pathname.replace(/^\/notice\/.*?\/(.*)$/, "$1"),
+          },
+          query
+        )
+      );
     } else {
       handle(req, res, parsedUrl);
     }

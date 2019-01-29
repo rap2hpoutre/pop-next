@@ -280,7 +280,7 @@ export default class extends React.Component {
             </div>
             <p>
               Découvrir le patrimoine français à travers l'
-              <Link to="/topics">affichage thématique</Link>
+              <Link href="/topics"><a>affichage thématique</a></Link>
             </p>
           </div>
         </div>

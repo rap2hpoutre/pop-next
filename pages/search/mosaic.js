@@ -5,5 +5,5 @@ export default class extends React.Component {
     const location = asPath;
     return { location }
   }
-  render = () => <Search display="list" location={this.props.location}></Search>;
+  render = () => <Search display="mosaic" location={this.props.location}></Search>;
 }

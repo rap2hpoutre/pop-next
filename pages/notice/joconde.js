@@ -1,11 +1,11 @@
-import "../styles/index.css";
 import Head from "next/head";
 import fetch from "isomorphic-unfetch";
+import Layout from "../../components/Layout"
 
 export default class extends React.Component {
   static async getInitialProps({ query: { id } }) {
     const res = await fetch(
-      "http://pop-api-staging.eu-west-3.elasticbeanstalk.com/memoire/" + id
+      "http://pop-api-staging.eu-west-3.elasticbeanstalk.com/joconde/" + id
     );
     const notice = await res.json();
     console.log("loili");
@@ -17,18 +17,14 @@ export default class extends React.Component {
 
   render() {
     return (
-      <div>
+      <Layout>
         <Head>
           <title>{this.props.notice.TICO || this.props.notice.LEG}</title>
-          <meta
-            name="viewport"
-            content="initial-scale=1.0, width=device-width"
-          />
         </Head>
-        <img src="/static/logo.png" alt="my image" />
-        <h4>NOTICE {this.props.id}</h4>
-        <pre>{JSON.stringify(this.props.notice)}</pre>
-      </div>
+        <h4>NOTICE {this.props.id} JOCONDE</h4>
+        <h3>{this.props.notice.TICO}</h3>
+        <div>{JSON.stringify(this.props.notice)}</div>
+      </Layout>
     );
   }
 }
