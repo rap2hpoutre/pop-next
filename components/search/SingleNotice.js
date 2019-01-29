@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import Link from "next/link";
 import shave from "shave";
 import "./SingleNotice.css";
 import { image } from "./image";
@@ -105,13 +105,10 @@ export default class SingleNotice extends React.Component {
               <br />
               {data.REF}
             </span>
-            <Link
-              style={{ textDecoration: "none" }}
-              to={`/notice/${index}/${data.REF}`}
-              className="more"
-              key={data.REF}
-            >
-              Détails
+            <Link href={`/notice/${index}/${data.REF}`} key={data.REF}>
+              <a style={{ textDecoration: "none" }} className="more">
+                Détails
+              </a>
             </Link>
           </div>
         </div>

@@ -111,8 +111,7 @@ export default class extends React.Component {
     const images = [
       {
         id: 1,
-        text:
-          "Anthony Quinn et Gina Lollobrigida dans Notre-Dame de Paris de Jean Delannoy.",
+        text: "Anthony Quinn et Gina Lollobrigida dans Notre-Dame de Paris de Jean Delannoy.",
         author: "Voinquel, Raymond (photographe), 1956.",
         source: "Médiathèque de l'architecture et du patrimoine."
       },
@@ -136,8 +135,7 @@ export default class extends React.Component {
       },
       {
         id: 6,
-        text:
-          "Biscuiterie Jeannette. Détail de la doseuse pondérale à pesées associative.",
+        text: "Biscuiterie Jeannette. Détail de la doseuse pondérale à pesées associative.",
         author: "Manuel de Rugy (photographe).",
         source: "Inventaire général - région Normandie, base Mémoire."
       },
@@ -228,9 +226,7 @@ export default class extends React.Component {
       <Layout>
         <div className="home">
           <Head>
-            <title>
-              POP - Plateforme Ouverte du Patrimoine - Ministère de la Culture
-            </title>
+            <title>POP - Plateforme Ouverte du Patrimoine - Ministère de la Culture</title>
             <meta
               name="description"
               content="POP propose de faire des données patrimoniales un bien commun."
@@ -239,9 +235,8 @@ export default class extends React.Component {
           {this.renderBanner()}
           <div className="home-search">
             <h1>
-              La plateforme POP regroupe les contenus numériques du patrimoine
-              français afin de les rendre accessibles et consultables au plus
-              grand nombre
+              La plateforme POP regroupe les contenus numériques du patrimoine français afin de les
+              rendre accessibles et consultables au plus grand nombre
             </h1>
             <Input
               id="main-search"
@@ -252,10 +247,7 @@ export default class extends React.Component {
                 }
               }}
             />
-            <Button
-              onClick={this.gotoSearch}
-              disabled={this.state.selected.length === 0}
-            >
+            <Button onClick={this.gotoSearch} disabled={this.state.selected.length === 0}>
               Rechercher
             </Button>
             <div className="search-areas">
@@ -280,7 +272,9 @@ export default class extends React.Component {
             </div>
             <p>
               Découvrir le patrimoine français à travers l'
-              <Link href="/topics"><a>affichage thématique</a></Link>
+              <Link href="/topics">
+                <a>affichage thématique</a>
+              </Link>
             </p>
           </div>
         </div>

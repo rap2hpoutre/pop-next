@@ -1,6 +1,6 @@
 import React from "react";
 import Loader from "../../components/Loader";
-import { Link } from "react-router-dom";
+import Link from "next/link";
 import { image } from "../search/image";
 import "./LinkedNotices.css";
 class LinkedNotice extends React.Component {
@@ -27,20 +27,18 @@ class LinkedNotice extends React.Component {
 class SmallNotice extends React.Component {
   render() {
     return (
-      <Link
-        style={{ textDecoration: "none" }}
-        to={`/notice/${this.props.notice.collection}/${this.props.notice.REF}`}
-        className="card"
-      >
-        {image(this.props.notice)}
-        <div className="content">
-          <h3>{this.props.notice.TICO}</h3>
-          <p className="categories">{this.props.notice.DENO.join(", ")}</p>
-          <div>
-            <p>{this.props.notice.DOMN}</p>
-            <p>{this.props.notice.AUTR}</p>
+      <Link href={`/notice/${this.props.notice.collection}/${this.props.notice.REF}`}>
+        <a style={{ textDecoration: "none" }} className="card">
+          {image(this.props.notice)}
+          <div className="content">
+            <h3>{this.props.notice.TICO}</h3>
+            <p className="categories">{this.props.notice.DENO.join(", ")}</p>
+            <div>
+              <p>{this.props.notice.DOMN}</p>
+              <p>{this.props.notice.AUTR}</p>
+            </div>
           </div>
-        </div>
+        </a>
       </Link>
     );
   }

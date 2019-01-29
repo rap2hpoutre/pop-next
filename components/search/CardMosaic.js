@@ -1,20 +1,20 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import Link from "next/link";
 import { Col } from "reactstrap";
 import { image } from "./image";
 import "./CardMosaic.css";
 export default ({ data }) => (
   <Col>
     <Link
-      style={{ textDecoration: "none" }}
-      to={`/notice/${data._index.replace(/[0-9]+/, "")}/${data.REF}`}
-      className="mosaique-card"
+      href={`/notice/${data._index.replace(/[0-9]+/, "")}/${data.REF}`}
       key={data.REF}
     >
-      <div className="thumbnail">{image(data)}</div>
-      <div className="content">
-        <span>{data.TICO || data.LEG}</span>
-      </div>
+      <a style={{ textDecoration: "none" }} className="mosaique-card">
+        <div className="thumbnail">{image(data)}</div>
+        <div className="content">
+          <span>{data.TICO || data.LEG}</span>
+        </div>
+      </a>
     </Link>
   </Col>
 );

@@ -9,9 +9,8 @@ import ContactUs from "./ContactUs";
 import Map from "./Map";
 import { schema, toFieldImages, hasCoordinates } from "./utils";
 
-import API from "../../services/api";
 import Loader from "../../components/Loader";
-import Helmet from "../../components/Helmet";
+import Head from "next/head";
 import NotFound from "../../components/NotFound";
 
 class Joconde extends React.Component {
@@ -35,20 +34,11 @@ class Joconde extends React.Component {
     }
   }
 
-  loadMuseo(m) {
-    try {
-      return API.getMuseo(m);
-    } catch (e) {}
-    return null;
-  }
-
   async load(ref) {
-    const notice = await API.getNotice("joconde", ref);
-    const museo = notice && notice.MUSEO && (await this.loadMuseo(notice.MUSEO));
     this.setState({
       loading: false,
-      notice,
-      museo
+      notice: this.props.notice,
+      museo: this.props.museo
     });
   }
 
@@ -154,11 +144,11 @@ class Joconde extends React.Component {
     return (
       <div className="notice">
         <Container>
-          <Helmet
-            title={`${notice.TICO || notice.TITR || ""} - POP`}
-            description={description}
-            schema={schema(obj)}
-          />
+          <Head>
+            <title>{`${notice.TICO || notice.TITR || ""} - POP`}</title>
+            <meta content={description} name="description" />
+            <script type="application/ld+json">{schema(obj)}</script>
+          </Head>
 
           <h1 className="heading">{notice.TICO}</h1>
 

@@ -1,11 +1,15 @@
 import React from "react";
 import { Container } from "reactstrap";
 import "./NotFound.css";
-import courbet from "../assets/courbet.jpeg";
-import Helmet from "./Helmet";
+import Head from "next/head"
 
 const NotFound = () => (
   <Container className="notice-not-found" fluid>
+  <Head>
+  <title>Page introuvable - POP - Plateforme Ouverte du Patrimoine</title>
+            <meta content={description} name="description" />
+            <script type="application/ld+json">{schema(obj)}</script>
+  </Head>
     <Helmet
       title="Page introuvable - POP - Plateforme Ouverte du Patrimoine"
       description="POP propose de faire des données patrimoniales un bien commun dont il sera aussi simple de se servir que d’y contribuer."
@@ -21,7 +25,7 @@ const NotFound = () => (
       </p>
     </div>
     <div className="notice-not-found-right">
-      <img src={courbet} alt="Gustave courbet, le désespéré" />
+      <img src="/static/courbet.jpeg" alt="Gustave courbet, le désespéré" />
       <br />
       Gustave courbet, le désespéré
     </div>

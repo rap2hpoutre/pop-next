@@ -4,9 +4,8 @@ import Viewer from "react-viewer";
 import ImageGallery from "react-image-gallery";
 import "react-image-gallery/styles/css/image-gallery.css";
 import "react-viewer/dist/index.css";
-import { history } from "../../redux/store";
 import "./FieldImages.css";
-const noImage = require("../../assets/noimage.png");
+import Router from "next/router"
 
 class FieldImages extends React.Component {
   state = {
@@ -31,7 +30,7 @@ class FieldImages extends React.Component {
       };
       if (e.link) {
         obj.thumbnailLabel = (
-          <span onClick={() => history.push(e.link)} href={e.link}>
+          <span onClick={() => Router.push(e.link)} href={e.link}>
             LIEN
           </span>
         );
@@ -44,7 +43,7 @@ class FieldImages extends React.Component {
         showFullscreenButton={false}
         showPlayButton={false}
         showThumbnails={images.length > 1}
-        defaultImage={noImage}
+        defaultImage="/static/noimage.png"
         onClick={i => {
           const selected = this.state.images.findIndex(e => e.source === i.target.src);
           this.setState({ selected });

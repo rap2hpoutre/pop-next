@@ -23,6 +23,8 @@ import Layout from "../Layout";
 import Head from "next/head";
 
 import List from "./List";
+import Map from "./Map";
+import Mosaic from "./Mosaic";
 // import MuseoCard from "../../components/MuseoCard";
 
 import { es_url } from "../../config.js";
@@ -259,7 +261,7 @@ class Search extends React.Component {
                       componentId="image"
                       placeholder="oui ou non"
                       showSearch={false}
-                      defaultSelected={activeTab === "mosaique" ? ["oui"] : []}
+                      defaultSelected={activeTab === "mosaic" ? ["oui"] : []}
                       onCollapseChange={changeActiveFilter}
                       location={location}
                     />
@@ -475,8 +477,8 @@ class Search extends React.Component {
                   </Row>
                   <TabContent activeTab={activeTab}>
                     <TabPane tabId="list"><List filter={DEFAULT_FILTER} /></TabPane>
-                    <TabPane tabId="map">map</TabPane>
-                    <TabPane tabId="mosaic">mosaic</TabPane>
+                    <TabPane tabId="map"><Map filter={DEFAULT_FILTER}  location={location} /></TabPane>
+                    <TabPane tabId="mosaic"><Mosaic filter={DEFAULT_FILTER} /></TabPane>
                   </TabContent>
                 </div>
               </Row>

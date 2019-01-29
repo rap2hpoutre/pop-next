@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import Link from "next/link"
 import { image } from "./image";
 import shave from "shave";
 import "./CardMap.css";
@@ -79,11 +79,12 @@ export default class CardMap extends React.Component {
     }
     return (
       <Link
-        style={{ textDecoration: "none" }}
-        to={`/notice/${index}/${data.REF}`}
-        className="map-card"
+        
+        href={`/notice/${index}/${data.REF}`}
+        
         key={data.REF}
       >
+      <a style={{ textDecoration: "none" }} className="map-card">
         <div className="thumbnail">{image(data)}</div>
         <div className="content">
           <div style={{ display: "flex" }}>
@@ -105,6 +106,7 @@ export default class CardMap extends React.Component {
             <p>{content.loc}</p>
           </div>
         </div>
+        </a>
       </Link>
     );
   }

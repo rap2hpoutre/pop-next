@@ -7,9 +7,6 @@ import Loader from "../../components/Loader";
 import LinkedNotices from "./LinkedNotices";
 import SingleNotice from "./SingleNotice";
 
-import SateliteImg from "../../assets/Satelite.png";
-import StreetImg from "../../assets/street.png";
-
 import "./mapbox-gl.css";
 import "./Map.css";
 
@@ -494,9 +491,9 @@ class Map extends React.Component {
           </div>
           <div className="switch-view" onClick={this.onSwitchStyle}>
             {this.state.style === "streets" ? (
-              <img src={SateliteImg} className="thumbnailStyle" alt="style" />
+              <img src="/static/satelite.png" className="thumbnailStyle" alt="style" />
             ) : (
-              <img src={StreetImg} className="thumbnailStyle" alt="style" />
+              <img src="/static/street.png" className="thumbnailStyle" alt="style" />
             )}
           </div>
         </div>
