@@ -171,7 +171,7 @@ class Search extends React.Component {
       <Layout>
         <div className="search">
           <Head>
-            <title>Lol</title>
+            <title>Recherche - POP</title>
             <meta
               name="description"
               content="Effectuer une recherche sur POP. Découvrez le moteur de cherche qui vous aidera à trouver facilement ce que vous recherchez sur POP."

@@ -4,7 +4,7 @@ import { Row, Col, Container } from "reactstrap";
 import { bucket_url } from "../config";
 import Head from "next/head";
 import Layout from "../components/Layout"
-import "./topics.css";
+import "../styles/topics.css";
 
 const cultureUrl = "http://www2.culture.gouv.fr/Wave/image/";
 const memoireImg = uri => `${cultureUrl}memoire/${uri}`;
