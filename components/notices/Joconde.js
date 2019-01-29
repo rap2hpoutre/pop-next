@@ -1,6 +1,5 @@
 import React from "react";
 import { Row, Col, Container } from "reactstrap";
-import LinkedNotices from "./LinkedNotices";
 
 import Field from "./Field";
 import Title from "./Title";
@@ -8,45 +7,15 @@ import FieldImages from "./FieldImages";
 import ContactUs from "./ContactUs";
 import Map from "./Map";
 import { schema, toFieldImages, hasCoordinates } from "./utils";
-
-import Loader from "../../components/Loader";
 import Head from "next/head";
-import NotFound from "../../components/NotFound";
+import "./Notice.css";
 
 class Joconde extends React.Component {
-  state = {
-    notice: null,
-    museo: null,
-    loading: true,
-    links: []
-  };
-
-  componentDidMount() {
-    const { match } = this.props;
-    this.load(match.params.ref);
-  }
-
-  componentWillReceiveProps(newProps) {
-    const { match } = this.props;
-    if (match && match.params.ref !== newProps.match.params.ref) {
-      this.setState({ loading: true });
-      this.load(newProps.match.params.ref);
-    }
-  }
-
-  async load(ref) {
-    this.setState({
-      loading: false,
-      notice: this.props.notice,
-      museo: this.props.museo
-    });
-  }
-
   getMetaDescription = () => {
-    const titre = this.state.notice.TICO || this.state.notice.TITR || "";
-    const auteur = this.state.notice.AUTR ? this.state.notice.AUTR : "";
-    if (this.state.notice.DOMN && this.state.notice.DOMN.length === 1) {
-      const category = this.state.notice.DOMN[0];
+    const titre = this.props.TICO || this.props.TITR || "";
+    const auteur = this.props.AUTR ? this.props.AUTR : "";
+    if (this.props.DOMN && this.props.DOMN.length === 1) {
+      const category = this.props.DOMN[0];
       if (category.toLowerCase() === "peinture") {
         return `Découvrez ${titre}, cette ${category}, réalisée par ${auteur}. Cliquez ici !`;
       }
@@ -65,7 +34,7 @@ class Joconde extends React.Component {
 
   // Display a list of links to authors
   author() {
-    const author = this.state.notice.AUTR;
+    const author = this.props.AUTR;
     if (!author) {
       return <div />;
     }
@@ -87,7 +56,7 @@ class Joconde extends React.Component {
 
   // Display a list of links to domains
   domain() {
-    const domain = this.state.notice.DOMN;
+    const domain = this.props.DOMN;
     if (!domain || !Array.isArray(domain)) {
       return <div />;
     }
@@ -102,7 +71,7 @@ class Joconde extends React.Component {
   }
 
   period() {
-    const period = this.state.notice.PERI;
+    const period = this.props.PERI;
     if (!period || !Array.isArray(period)) {
       return <div />;
     }
@@ -117,15 +86,7 @@ class Joconde extends React.Component {
   }
 
   render() {
-    if (this.state.loading) {
-      return <Loader />;
-    }
-
-    const notice = this.state.notice;
-
-    if (!notice) {
-      return <NotFound />;
-    }
+    const notice = this.props.notice;
 
     const description = this.getMetaDescription();
     const obj = {
@@ -278,7 +239,6 @@ class Joconde extends React.Component {
               </div>
             </Col>
             <Col md="4">
-              <LinkedNotices links={this.state.links} />
               <div className="sidebar-section info">
                 <h2>À propos de la notice</h2>
                 <div>
@@ -294,7 +254,7 @@ class Joconde extends React.Component {
                 <ContactUs contact={notice.CONTACT} reference={notice.REF} />
               </div>
 
-              <SeeMore notice={notice} museo={this.state.museo} />
+              <SeeMore notice={notice} museo={this.props.museo} />
 
               {hasCoordinates(notice.POP_COORDONNEES) ? <Map notice={notice} /> : <div />}
             </Col>

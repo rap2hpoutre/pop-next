@@ -6,61 +6,16 @@ import LinkedNotices from "./LinkedNotices";
 import Title from "./Title";
 import FieldImages from "./FieldImages";
 import ContactUs from "./ContactUs";
-import { findCollection, toFieldImages } from "./utils";
-
-import Loader from "../../components/Loader";
-import API from "../../services/api";
+import { toFieldImages } from "./utils";
+import Head from "next/head";
 import NotFound from "../../components/NotFound";
-import Helmet from "../../components/Helmet";
+import "./Notice.css";
 
 const capitalizeFirstLetter = s => s.charAt(0).toUpperCase() + s.slice(1);
 
 class Memoire extends React.Component {
-  state = {
-    notice: null,
-    links: null,
-    loading: true
-  };
-
-  componentDidMount() {
-    const { match } = this.props;
-    this.load(match.params.ref);
-  }
-
-  componentWillReceiveProps(newProps) {
-    const { match } = this.props;
-    if (match && match.params.ref !== newProps.match.params.ref) {
-      this.load(newProps.match.params.ref);
-    }
-  }
-
-  load(ref) {
-    this.setState({ loading: true });
-    API.getNotice("memoire", ref).then(notice => {
-      const arr = [];
-      const collection = findCollection(notice.LBASE);
-      if (collection) {
-        arr.push(API.getNotice(collection, notice.LBASE));
-      } else {
-        console.log("Cant get notice of ", notice.LBASE);
-      }
-      Promise.all(arr).then(values => {
-        const links = [];
-        for (let i = 0; i < values.length; i++) {
-          if (!values[i]) {
-            console.log("IMPOSSIBLE DE CHARGER LA NOTICE");
-          } else {
-            links.push(values[i]);
-          }
-        }
-        this.setState({ links });
-      });
-      this.setState({ loading: false, notice });
-    });
-  }
-
   rawTitle() {
-    const notice = this.state.notice;
+    const notice = this.props.notice;
     return notice.TICO || notice.TITR || notice.EDIF || notice.LEG || "";
   }
 
@@ -70,7 +25,7 @@ class Memoire extends React.Component {
   }
 
   metaDescription = () => {
-    const author = this.state.notice.AUTP;
+    const author = this.props.notice.AUTP;
     if (author) {
       return capitalizeFirstLetter(`${this.rawTitle()}, par ${author}`);
     }
@@ -85,16 +40,14 @@ class Memoire extends React.Component {
   }
 
   photographer() {
-    const autp = this.state.notice.AUTP;
+    const autp = this.props.notice.AUTP;
     return autp && <a href={`/search/list?auteur=["${autp}"]`}>{autp}</a>;
   }
 
   render() {
-    if (this.state.loading) {
-      return <Loader />;
-    }
+    const notice = this.props.notice;
 
-    const notice = this.state.notice;
+    console.log(this.props.links)
 
     if (!notice) {
       return <NotFound />;
@@ -103,7 +56,10 @@ class Memoire extends React.Component {
     return (
       <div className="notice">
         <Container>
-          <Helmet title={this.pageTitle()} description={this.metaDescription()} />
+        <Head>
+            <title>{this.pageTitle()}</title>
+            <meta content={this.metaDescription()} name="description" />
+          </Head>
           <h1 className="heading">{this.rawTitle()}</h1>
           {this.fieldImage(notice)}
           <Row>
@@ -332,7 +288,7 @@ class Memoire extends React.Component {
               </div>
             </Col>
             <Col md="4">
-              <LinkedNotices links={this.state.links} />
+              <LinkedNotices links={this.props.links} />
               <div className="sidebar-section info">
                 <h2>À propos de la notice</h2>
                 <div>

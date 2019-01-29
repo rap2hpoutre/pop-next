@@ -1,15 +1,10 @@
 import React from "react";
-import Loader from "../../components/Loader";
 import Link from "next/link";
 import { image } from "../search/image";
 import "./LinkedNotices.css";
 class LinkedNotice extends React.Component {
   render() {
-    if (!this.props.links) {
-      return <Loader />;
-    }
-
-    if (!this.props.links.length) {
+    if (!this.props.links || !this.props.links.length) {
       return <div />;
     }
     const notices = this.props.links.map(notice => (
