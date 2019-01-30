@@ -12,10 +12,10 @@ import "./Notice.css";
 
 class Joconde extends React.Component {
   getMetaDescription = () => {
-    const titre = this.props.TICO || this.props.TITR || "";
-    const auteur = this.props.AUTR ? this.props.AUTR : "";
-    if (this.props.DOMN && this.props.DOMN.length === 1) {
-      const category = this.props.DOMN[0];
+    const titre = this.props.notice.TICO || this.props.notice.TITR || "";
+    const auteur = this.props.notice.AUTR ? this.props.notice.AUTR : "";
+    if (this.props.notice.DOMN && this.props.notice.DOMN.length === 1) {
+      const category = this.props.notice.DOMN[0];
       if (category.toLowerCase() === "peinture") {
         return `Découvrez ${titre}, cette ${category}, réalisée par ${auteur}. Cliquez ici !`;
       }
@@ -34,7 +34,7 @@ class Joconde extends React.Component {
 
   // Display a list of links to authors
   author() {
-    const author = this.props.AUTR;
+    const author = this.props.notice.AUTR;
     if (!author) {
       return <div />;
     }
@@ -56,7 +56,7 @@ class Joconde extends React.Component {
 
   // Display a list of links to domains
   domain() {
-    const domain = this.props.DOMN;
+    const domain = this.props.notice.DOMN;
     if (!domain || !Array.isArray(domain)) {
       return <div />;
     }
@@ -71,7 +71,7 @@ class Joconde extends React.Component {
   }
 
   period() {
-    const period = this.props.PERI;
+    const period = this.props.notice.PERI;
     if (!period || !Array.isArray(period)) {
       return <div />;
     }

@@ -1,15 +1,13 @@
 import React from "react";
 import { Container } from "reactstrap";
+import Head from "next/head";
 import "./NotFound.css";
-import Head from "next/head"
 
 const NotFound = () => (
   <Container className="notice-not-found" fluid>
-  <Head>
-  <title>Page introuvable - POP - Plateforme Ouverte du Patrimoine</title>
-            <meta content={description} name="description" />
-            <script type="application/ld+json">{schema(obj)}</script>
-  </Head>
+    <Head>
+      <title>Page introuvable - POP - Plateforme Ouverte du Patrimoine</title>
+    </Head>
     <div className="notice-not-found-left">
       <h1>POPSI !</h1>
       <p>
