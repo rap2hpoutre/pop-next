@@ -24,9 +24,9 @@
   },
   "devDependencies": {},
   "scripts": {
-    "dev": "node server.js",
+    "dev": "node services/server.js",
     "build": "next build",
-    "start": "NODE_ENV=production node server.js"
+    "start": "NODE_ENV=production node services/server.js"
   },
   "prettier": {
     "printWidth": 100

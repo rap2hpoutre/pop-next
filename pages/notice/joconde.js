@@ -1,4 +1,4 @@
-import API from "../../api";
+import API from "../../services/api";
 import Layout from "../../components/Layout"
 import Joconde from "../../components/notices/Joconde"
 

@@ -1,5 +1,5 @@
 import fetch from "isomorphic-unfetch";
-const { api_url } = require("./config");
+const { api_url } = require("../config");
 
 class api {
   getNotice(collection, ref) {

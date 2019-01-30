@@ -1,47 +1,18 @@
 import React from "react";
 import { Row, Col, Container } from "reactstrap";
-
+import Head from "next/head";
 import Field from "./Field";
 import ContactUs from "./ContactUs";
 import FieldImages from "./FieldImages";
-
-import API from "../../services/api";
-import Loader from "../../components/Loader";
-import NotFound from "../../components/NotFound";
-import Helmet from "../../components/Helmet";
-
 import { schema, toFieldImages } from "./utils";
+import "./Notice.css";
 
 class Mnr extends React.Component {
-  state = {
-    notice: null,
-    loading: true
-  };
-
-  componentDidMount() {
-    const { match } = this.props;
-    this.load(match.params.ref);
-  }
-
-  componentWillReceiveProps(newProps) {
-    const { match } = this.props;
-    if (match && match.params.ref !== newProps.match.params.ref) {
-      this.load(newProps.match.params.ref);
-    }
-  }
-
-  load(ref) {
-    this.setState({ loading: true });
-    API.getNotice("mnr", ref).then(notice => {
-      this.setState({ loading: false, notice });
-    });
-  }
-
   getMetaDescription = () => {
-    const titre = this.state.notice.TICO || this.state.notice.TITR || "";
-    const auteur = this.state.notice.AUTR ? this.state.notice.AUTR.join(" ") : "";
-    if (this.state.notice.DOMN && this.state.notice.DOMN.length === 1) {
-      const category = this.state.notice.DOMN[0];
+    const titre = this.props.notice.TICO || this.props.notice.TITR || "";
+    const auteur = this.props.notice.AUTR ? this.props.notice.AUTR.join(" ") : "";
+    if (this.props.notice.DOMN && this.props.notice.DOMN.length === 1) {
+      const category = this.props.notice.DOMN[0];
       if (category.toLowerCase() === "peinture") {
         return `Découvrez ${titre}, cette ${category}, réalisée par ${auteur}. Cliquez ici !`;
       }
@@ -59,7 +30,7 @@ class Mnr extends React.Component {
   }
 
   domain() {
-    const domain = this.state.notice.DOMN;
+    const domain = this.props.notice.DOMN;
     if (!domain || !Array.isArray(domain)) {
       return <div />;
     }
@@ -74,15 +45,7 @@ class Mnr extends React.Component {
   }
 
   render() {
-    if (this.state.loading) {
-      return <Loader />;
-    }
-
-    const notice = this.state.notice;
-
-    if (!notice) {
-      return <NotFound />;
-    }
+    const notice = this.props.notice;
 
     const description = this.getMetaDescription();
     const obj = {
@@ -101,13 +64,14 @@ class Mnr extends React.Component {
     return (
       <div className="notice">
         <Container>
-          <Helmet
-            title={`${notice.TICO || notice.TITR || ""} - ${
+          <Head>
+            <title>{`${notice.TICO || notice.TITR || ""} - ${
               notice.AUTR ? notice.AUTR.join(" ") : ""
-            } - POP`}
-            description={description}
-            schema={schema(obj)}
-          />
+            } - POP`}</title>
+            <meta content={description} name="description" />
+            <script type="application/ld+json">{schema(obj)}</script>
+          </Head>
+
           <h1 className="heading">{notice.TICO || notice.TITR}</h1>
           {this.fieldImage(notice)}
           <Row>

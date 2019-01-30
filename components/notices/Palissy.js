@@ -1,76 +1,21 @@
 import React from "react";
 import { Row, Col, Container } from "reactstrap";
-
+import Head from "next/head";
 import Field from "./Field";
 import LinkedNotices from "./LinkedNotices";
 import Title from "./Title";
 import ContactUs from "./ContactUs";
 import FieldImages from "./FieldImages";
+import "./Notice.css";
 
-import API from "../../services/api";
-import Helmet from "../../components/Helmet";
-import NotFound from "../../components/NotFound";
-import Loader from "../../components/Loader";
-
-import { postFixedLink, schema, toFieldImages, findCollection } from "./utils";
+import { postFixedLink, schema, toFieldImages } from "./utils";
 
 class Palissy extends React.Component {
-  state = {
-    notice: null,
-    loading: true,
-    links: null
-  };
-
-  componentDidMount() {
-    const { match } = this.props;
-    this.load(match.params.ref);
-  }
-
-  componentWillReceiveProps(newProps) {
-    const { match } = this.props;
-    if (match && match.params.ref !== newProps.match.params.ref) {
-      this.load(newProps.match.params.ref);
-    }
-  }
-
-  load(ref) {
-    this.setState({ loading: true });
-    API.getNotice("palissy", ref).then(notice => {
-      this.setState({ loading: false, notice });
-
-      const { RENV, REFP, REFE, REFA, LBASE2, REF } = notice;
-      // RENV -> MERIMEE
-      // REFP -> MERIMEE
-      // REFE -> MERIMEE
-      // REFA -> MERIMEE
-      // LBASE2 -> MERIMEE
-      const arr = [];
-      [...RENV, ...REFP, ...REFE, ...REFA, LBASE2]
-        .filter(e => e && e != REF)
-        .forEach(e => {
-          const collection = findCollection(e);
-          arr.push(API.getNotice(collection, e));
-        });
-
-      Promise.all(arr).then(values => {
-        const links = [];
-        for (let i = 0; i < values.length; i++) {
-          if (!values[i]) {
-            console.log("IMPOSSIBLE DE CHARGER LA NOTICE");
-          } else {
-            links.push(values[i]);
-          }
-        }
-        this.setState({ links });
-      });
-    });
-  }
-
   getMetaDescription = () => {
-    const titre = this.state.notice.TICO || this.state.notice.TITR || "";
-    const auteur = this.state.notice.AUTR ? this.state.notice.AUTR.join(" ") : "";
-    if (this.state.notice.CATE && this.state.notice.CATE.length === 1) {
-      const category = this.state.notice.CATE[0];
+    const titre = this.props.notice.TICO || this.props.notice.TITR || "";
+    const auteur = this.props.notice.AUTR ? this.props.notice.AUTR.join(" ") : "";
+    if (this.props.notice.CATE && this.props.notice.CATE.length === 1) {
+      const category = this.props.notice.CATE[0];
       if (category.toLowerCase() === "sculpture") {
         return `Découvrez ${titre}, cette ${category}, réalisée par ${auteur}. Cliquez ici !`;
       }
@@ -89,7 +34,7 @@ class Palissy extends React.Component {
 
   // Display a list of links to authors
   authors() {
-    const authors = this.state.notice.AUTR;
+    const authors = this.props.notice.AUTR;
     if (!authors || !Array.isArray(authors) || !authors.length) {
       return <div />;
     }
@@ -105,15 +50,7 @@ class Palissy extends React.Component {
   }
 
   render() {
-    if (this.state.loading) {
-      return <Loader />;
-    }
-
-    const notice = this.state.notice;
-
-    if (!notice) {
-      return <NotFound />;
-    }
+    const notice = this.props.notice;
 
     const description = this.getMetaDescription();
 
@@ -131,16 +68,13 @@ class Palissy extends React.Component {
     return (
       <div className="notice">
         <Container>
-          <Helmet
-            title={`${notice.TICO || notice.TITR || ""} - POP`}
-            description={description}
-            schema={schema(obj)}
-          />
-
+          <Head>
+            <title>{`${notice.TICO || notice.TITR || ""} - POP`}</title>
+            <meta content={description} name="description" />
+            <script type="application/ld+json">{schema(obj)}</script>
+          </Head>
           <h1 className="heading">{notice.TICO}</h1>
-
           {this.fieldImage(notice)}
-
           <Row>
             <Col md="8">
               <div className="notice-details">
@@ -330,7 +264,7 @@ class Palissy extends React.Component {
               </div>
             </Col>
             <Col md="4">
-              <LinkedNotices links={this.state.links} />
+              <LinkedNotices links={this.props.links} />
               <div className="sidebar-section info">
                 <h2>À propos de la notice</h2>
                 <div>

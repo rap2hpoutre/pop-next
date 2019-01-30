@@ -1,89 +1,22 @@
 import React from "react";
 import { Row, Col, Container } from "reactstrap";
-
 import Field from "./Field";
 import LinkedNotices from "./LinkedNotices";
 import Title from "./Title";
 import Map from "./Map";
 import ContactUs from "./ContactUs";
 import FieldImages from "./FieldImages";
-
-import API from "../../services/api";
-import Loader from "../../components/Loader";
-import Helmet from "../../components/Helmet";
-import NotFound from "../../components/NotFound";
+import "./Notice.css";
+import Head from "next/head";
 
 import { postFixedLink, schema, toFieldImages, hasCoordinates } from "./utils";
 
 class Merimee extends React.Component {
-  state = {
-    notice: null,
-    links: null,
-    loading: true
-  };
-
-  componentDidMount() {
-    const { match } = this.props;
-    this.load(match.params.ref);
-  }
-
-  componentWillReceiveProps(newProps) {
-    const { match } = this.props;
-    if (match && match.params.ref !== newProps.match.params.ref) {
-      this.load(newProps.match.params.ref);
-    }
-  }
-
-  load(ref) {
-    this.setState({ loading: true });
-    API.getNotice("merimee", ref).then(notice => {
-      console.log(notice);
-      this.setState({ loading: false, notice });
-      if (!notice) {
-        return;
-      }
-
-      const { RENV, REFP, REFE, REFO } = notice;
-      // RENV -> MERIMEE
-      // REFP -> MERIMEE
-      // REFE -> MERIMEE
-      // REFO -> PALISSY
-      const arr = [];
-      for (let i = 0; Array.isArray(RENV) && i < RENV.length; i++) {
-        arr.push(API.getNotice("merimee", RENV[i]));
-        if (arr.length > 50) break;
-      }
-      for (let i = 0; Array.isArray(REFP) && i < REFP.length; i++) {
-        arr.push(API.getNotice("merimee", REFP[i]));
-        if (arr.length > 50) break;
-      }
-      for (let i = 0; Array.isArray(REFE) && i < REFE.length; i++) {
-        arr.push(API.getNotice("merimee", REFE[i]));
-        if (arr.length > 50) break;
-      }
-      for (let i = 0; Array.isArray(REFO) && i < REFO.length; i++) {
-        arr.push(API.getNotice("palissy", REFO[i]));
-        if (arr.length > 50) break;
-      }
-      Promise.all(arr).then(values => {
-        const links = [];
-        for (let i = 0; i < values.length; i++) {
-          if (!values[i]) {
-            console.log("IMPOSSIBLE DE CHARGER LA NOTICE");
-          } else {
-            links.push(values[i]);
-          }
-        }
-        this.setState({ links });
-      });
-    });
-  }
-
   getMetaDescription = () => {
-    const titre = this.state.notice.TICO || this.state.notice.TITR || "";
-    const datation = this.state.notice.SCLE ? this.state.notice.SCLE.join(" ") : "";
-    if (this.state.notice.DENO && this.state.notice.DENO.length === 1) {
-      const category = this.state.notice.DENO[0];
+    const titre = this.props.notice.TICO || this.props.notice.TITR || "";
+    const datation = this.props.notice.SCLE ? this.props.notice.SCLE.join(" ") : "";
+    if (this.props.notice.DENO && this.props.notice.DENO.length === 1) {
+      const category = this.props.notice.DENO[0];
       if (category.toLowerCase() === "église") {
         return `Découvrez ${titre}, cette ${category} du ${datation}. Cliquez ici !`;
       }
@@ -102,7 +35,7 @@ class Merimee extends React.Component {
 
   // Display a list of links to authors
   authors() {
-    const authors = this.state.notice.AUTR;
+    const authors = this.props.notice.AUTR;
     if (!authors || !Array.isArray(authors) || !authors.length) {
       return <div />;
     }
@@ -118,15 +51,7 @@ class Merimee extends React.Component {
   }
 
   render() {
-    if (this.state.loading) {
-      return <Loader />;
-    }
-
-    const notice = this.state.notice;
-    if (!notice) {
-      return <NotFound />;
-    }
-
+    const notice = this.props.notice;
     const description = this.getMetaDescription();
 
     const obj = {
@@ -142,11 +67,11 @@ class Merimee extends React.Component {
     return (
       <div className="notice">
         <Container>
-          <Helmet
-            title={`${notice.TICO || notice.TITR || ""} - POP`}
-            description={description}
-            schema={schema(obj)}
-          />
+        <Head>
+            <title>{`${notice.TICO || notice.TITR || ""} - POP`}</title>
+            <meta content={description} name="description" />
+            <script type="application/ld+json">{schema(obj)}</script>
+          </Head>
           <h1 className="heading">{notice.TICO}</h1>
 
           {this.fieldImage(notice)}
@@ -356,7 +281,7 @@ class Merimee extends React.Component {
               </div>
             </Col>
             <Col sm="4">
-              <LinkedNotices links={this.state.links} />
+              <LinkedNotices links={this.props.links} />
               <div className="sidebar-section info">
                 <h2>À propos de la notice</h2>
                 <div>
