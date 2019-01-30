@@ -2,8 +2,9 @@ import React from "react";
 import { Container } from "reactstrap";
 import Title from "./Title.js";
 import Logo from "./Logo.js";
-import "./Header.css";
 import Head from "next/head";
+import "./Header.css";
+
 
 export default () => (
   <div className="header">

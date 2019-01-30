@@ -20,8 +20,9 @@ app.prepare().then(() => {
     ];
     const noticeRegex = /^\/notice\/(.*?)\/(.*)$/;
 
+    console.log(parsedUrl.pathname, rootStaticFiles.indexOf(parsedUrl.pathname));
     if (rootStaticFiles.indexOf(parsedUrl.pathname) > -1) {
-      const path = join(__dirname, "static", parsedUrl.pathname);
+      const path = join(__dirname, "../static", parsedUrl.pathname);
       app.serveStatic(req, res, path);
     } else if (pathname.match(noticeRegex)) {
       const renderPath = "/notice/" + pathname.replace(noticeRegex, "$1");

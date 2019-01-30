@@ -1,7 +1,7 @@
 import React from "react";
+import Layout from "../components/Layout";
 import NotFound from "../components/NotFound";
 import ErrorBoundary from "../components/ErrorBoundary";
-import Layout from "../components/Layout";
 
 export default class Error extends React.Component {
   static getInitialProps({ res, err, statusCode }) {
