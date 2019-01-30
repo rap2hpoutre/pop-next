@@ -12,7 +12,7 @@ const Footer = () => (
         </a>
       </li>
       <li className="list-inline-item">
-        <Link href="/opendata"><a>Télécharger les bases</a></Link>
+        <Link href="/opendata" prefetch><a>Télécharger les bases</a></Link>
       </li>
       <li className="list-inline-item">
         <a href={`mailto:pop.reseaux@gmail.com`} target="_blank">

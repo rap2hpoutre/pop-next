@@ -4,7 +4,7 @@ import "./Logo.css";
 
 const Logo = () => {
   return (
-    <Link href="/">
+    <Link prefetch href="/">
     <a className="logo">
       <img src="/static/logo.png" alt="Logo" className="md" />
       <h1>Ministère de la Culture</h1>

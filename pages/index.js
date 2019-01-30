@@ -86,6 +86,9 @@ const bases = [
 ];
 
 export default class extends React.Component {
+  componentDidMount() {
+    Router.prefetch('/search');
+  }
   constructor(props) {
     super(props);
     this.state = {
@@ -272,7 +275,7 @@ export default class extends React.Component {
             </div>
             <p>
               Découvrir le patrimoine français à travers l'
-              <Link href="/topics">
+              <Link prefetch href="/topics">
                 <a>affichage thématique</a>
               </Link>
             </p>
