@@ -87,7 +87,7 @@ const bases = [
 
 export default class extends React.Component {
   componentDidMount() {
-    Router.prefetch('/search/list');
+    Router.prefetch("/search/list");
   }
   constructor(props) {
     super(props);
@@ -107,7 +107,9 @@ export default class extends React.Component {
     } else {
       base = `base=${JSON.stringify(selected)}&`;
     }
-    Router.push(`/search/list?${base}mainSearch="${encodeURI(searchValue)}"`);
+    Router.push(`/search/list?${base}mainSearch="${encodeURI(searchValue)}"`).then(() =>
+      window.scrollTo(0, 0)
+    );
   }
 
   renderBanner() {
