@@ -87,7 +87,7 @@ const bases = [
 
 export default class extends React.Component {
   componentDidMount() {
-    Router.prefetch('/search');
+    Router.prefetch('/search/list');
   }
   constructor(props) {
     super(props);

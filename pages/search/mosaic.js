@@ -1,9 +1,13 @@
 import Search from "../../components/search/Search"
+import Router from "next/router";
 
 export default class extends React.Component {
   static async getInitialProps({ asPath }) {
-    const location = asPath;
-    return { location }
+    return { asPath }
   }
-  render = () => <Search display="mosaic" location={this.props.location}></Search>;
+  componentDidMount() {
+    Router.prefetch("/search/map");
+    Router.prefetch("/search/list");
+  }
+  render = () => <Search display="mosaic" location={this.props.asPath}></Search>;
 }
