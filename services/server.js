@@ -19,8 +19,6 @@ app.prepare().then(() => {
       "/googleb0e4bedffce14a4a.html"
     ];
     const noticeRegex = /^\/notice\/(.*?)\/(.*)$/;
-
-    console.log(parsedUrl.pathname, rootStaticFiles.indexOf(parsedUrl.pathname));
     if (rootStaticFiles.indexOf(parsedUrl.pathname) > -1) {
       const path = join(__dirname, "../static", parsedUrl.pathname);
       app.serveStatic(req, res, path);
