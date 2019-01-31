@@ -39,6 +39,8 @@ export default () => (
       <link rel="manifest" href="/manifest.json" />
       <link rel="shortcut icon" href="/favicon.ico" />
       <script src="https://cdnjs.cloudflare.com/ajax/libs/mapbox-gl/0.50.0/mapbox-gl.js" />
+      <script src="/static/driftt.js" />
+      <script src="/static/piwik.js" />
     </Head>
     <Container className="NavContainer">
       <Logo />
