@@ -1,7 +1,7 @@
 import React from "react";
 import Head from "next/head";
 import Layout from "../components/Layout";
-import "../styles/opendata.css";
+import "./opendata.css";
 
 export default () => (
   <Layout>

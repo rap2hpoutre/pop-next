@@ -8,9 +8,11 @@ class MuseoCard extends React.Component {
   };
 
   async componentDidMount() {
-    this.setState({
-      museo: await API.getMuseo(this.props.museo)
-    });
+    try {
+      this.setState({
+        museo: await API.getMuseo(this.props.museo)
+      });
+    } catch (e) {}
   }
 
   render() {

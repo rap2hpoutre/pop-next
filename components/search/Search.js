@@ -56,19 +56,6 @@ class Search extends React.Component {
     this.toggle = this.toggle.bind(this);
   }
 
-  getSelectedValues = () => {
-    const { location } = this.props;
-    const values = null; // queryString.parse(location.search.replace(/%22/g, ""));
-    let selectedValues = {};
-    for (const key in values) {
-      const value = values[key];
-      selectedValues[key] = {
-        value
-      };
-    }
-    return selectedValues;
-  };
-
   toggle(subRoute) {
     if (this.props.display !== subRoute) {
       Router.push(`/search/${subRoute}`);
@@ -76,10 +63,9 @@ class Search extends React.Component {
   }
 
   museo() {
-    const { location } = this.props;
-    const museo = queryString.parse(location.search).museo;
-    if (museo) {
-      return <MuseoCard museo={JSON.parse(museo)} />;
+    const query = queryString.parseUrl(this.props.location).query;
+    if (query && query.museo) {
+      return <MuseoCard museo={JSON.parse(query.museo)} />;
     }
   }
 
@@ -301,13 +287,6 @@ class Search extends React.Component {
                             render={props => {
                               let selectedValues = {};
                               selectedValues = props.selectedValues;
-                              /*
-                              if (isServer) {
-                                selectedValues = this.getSelectedValues();
-                              } else {
-                                selectedValues = props.selectedValues;
-                              }
-                              */
                               return (
                                 <div
                                   style={{

@@ -19,12 +19,17 @@ app.prepare().then(() => {
       "/googleb0e4bedffce14a4a.html"
     ];
     const noticeRegex = /^\/notice\/(.*?)\/(.*)$/;
+    const museoRegex = /^\/museo\/(.*?)$/;
     if (rootStaticFiles.indexOf(parsedUrl.pathname) > -1) {
       const path = join(__dirname, "../static", parsedUrl.pathname);
       app.serveStatic(req, res, path);
     } else if (pathname.match(noticeRegex)) {
       const renderPath = "/notice/" + pathname.replace(noticeRegex, "$1");
       const renderParams = Object.assign({ id: pathname.replace(noticeRegex, "$2") }, query);
+      app.render(req, res, renderPath, renderParams);
+    } else if (pathname.match(museoRegex)) {
+      const renderPath = "/museo";
+      const renderParams = Object.assign({ id: pathname.replace(museoRegex, "$1") }, query);
       app.render(req, res, renderPath, renderParams);
     } else {
       handle(req, res, parsedUrl);

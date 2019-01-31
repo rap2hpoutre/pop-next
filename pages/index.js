@@ -5,7 +5,7 @@ import React from "react";
 import Slider from "react-slick";
 import { Tooltip, Button, Input } from "reactstrap";
 import Router from "next/router";
-import "../styles/index.css";
+import "./index.css";
 
 const bases = [
   {
