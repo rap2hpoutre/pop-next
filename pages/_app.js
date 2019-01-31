@@ -15,9 +15,12 @@ export default class MyApp extends App {
   componentDidMount() {
     // console.log(window.location.pathname);
     Router.events.on("routeChangeStart", url => {
-      window._paq.push(["setDocumentTitle", document.title]);
-      // push(["setCustomUrl", currentPath]);
-      window._paq.push(["trackPageView"]);
+      if (window && window._paq) {
+        window._paq.push(['setCustomUrl', url]);
+        window._paq.push(["setDocumentTitle", document.title]);
+        window._paq.push(["trackPageView"]);
+        // trackSiteSearch
+      }
       console.log(`raven & piwik : ${url}`);
     });
   }
