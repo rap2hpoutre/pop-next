@@ -3,6 +3,8 @@ import Head from "next/head";
 import Layout from "../components/Layout";
 import "../styles/opendata.css";
 
+dsqdqs.dsqdqsdqs.dsqdsdq = dsqdsq;
+
 export default () => (
   <Layout>
     <div className="opendata-view">
