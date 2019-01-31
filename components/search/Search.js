@@ -1,36 +1,19 @@
 import React from "react";
-import {
-  Row,
-  Col,
-  Nav,
-  NavItem,
-  NavLink,
-  TabContent,
-  TabPane,
-  Container,
-  Badge
-} from "reactstrap";
-import queryString from "query-string";
+import { Row, Col, Nav, NavItem, NavLink, Container, Badge } from "reactstrap";
 import Router from "next/router";
-import {
-  ReactiveBase,
-  DataSearch,
-  SelectedFilters
-} from "@appbaseio/reactivesearch";
+import { ReactiveBase, DataSearch, SelectedFilters } from "@appbaseio/reactivesearch";
 import classnames from "classnames";
 import { MultiList } from "pop-shared";
 import Layout from "../Layout";
 import Head from "next/head";
-
 import List from "./List";
 import Map from "./Map";
 import Mosaic from "./Mosaic";
-// import MuseoCard from "../../components/MuseoCard";
-
+import MuseoCard from "../../components/MuseoCard";
 import { es_url } from "../../config.js";
-// import { isServer } from "../../redux/store";
-
 import "./Search.css";
+
+const BASES = ["merimee", "palissy", "memoire", "joconde", "mnr"].join(",");
 
 const DEFAULT_FILTER = [
   "mainSearch",
@@ -55,73 +38,22 @@ const ACTIVE_FILTER = {
 };
 
 const changeActiveFilter = (collapsed, componentId) => {
-  if (!collapsed) {
-    addActiveFilter(componentId);
-  } else {
-    removeActiveFilter(componentId);
-  }
-};
-
-const addActiveFilter = componentId => {
-  if (!ACTIVE_FILTER.hasOwnProperty(componentId)) {
+  if (!collapsed && !ACTIVE_FILTER.hasOwnProperty(componentId)) {
     ACTIVE_FILTER[componentId] = true;
-  }
-};
-
-const removeActiveFilter = componentId => {
-  if (ACTIVE_FILTER.hasOwnProperty(componentId)) {
+  } else if (collapsed && ACTIVE_FILTER.hasOwnProperty(componentId)) {
     delete ACTIVE_FILTER[componentId];
   }
 };
 
 class Search extends React.Component {
   state = {
-    activeTab: null,
-    bases: ["merimee", "palissy", "memoire", "joconde", "mnr"].join(","),
-    defaultSelected: "",
     mobile_menu: "mobile_close"
   };
 
   constructor(props) {
     super(props);
-
     this.toggle = this.toggle.bind(this);
   }
-
-  componentDidMount() {
-    const { location } = this.props;
-    const values = null; // queryString.parse(location.search);
-    const bases = null;
-
-    this.setState({
-      activeTab: this.getActiveTab(),
-      bases:
-        bases || ["merimee", "palissy", "memoire", "joconde", "mnr"].join(","),
-      defaultSelected: this.getMainSearchSelected()
-    });
-  }
-
-  componentDidUpdate(prevProps) {
-    /*
-    const { location } = this.props;
-    const { location: prevLocation } = prevProps;
-
-    if (location.pathname !== prevLocation.pathname) {
-      this.setState({ activeTab: this.getActiveTab() });
-    }
-    */
-  }
-
-  getMainSearchSelected = () => {
-    const { location } = this.props;
-    const values = null; // queryString.parse(location.search);
-    // const { bases, mainSearch } = values;
-    try {
-      return JSON.parse(mainSearch);
-    } catch (e) {
-      return "";
-    }
-  };
 
   getSelectedValues = () => {
     const { location } = this.props;
@@ -136,22 +68,8 @@ class Search extends React.Component {
     return selectedValues;
   };
 
-  getActiveTab = () => {
-    // const { location } = this.props;
-    let activeTab = this.props.display;
-    /*
-    if (/search\/map/.test(location.pathname)) {
-      activeTab = "map";
-    } else if (/search\/mosaique/.test(location.pathname)) {
-      activeTab = "mosaique";
-    }
-    */
-    return activeTab;
-  };
-
   toggle(subRoute) {
-    const { location, history } = this.props;
-    if (this.state.activeTab !== subRoute) {
+    if (this.props.display !== subRoute) {
       Router.push(`/search/${subRoute}`);
     }
   }
@@ -166,8 +84,7 @@ class Search extends React.Component {
 
   render() {
     const { location } = this.props;
-    const { bases, activeTab: activeTabState } = this.state;
-    const activeTab = activeTabState || this.getActiveTab();
+    const activeTab = this.props.display
 
     return (
       <Layout>
@@ -182,15 +99,13 @@ class Search extends React.Component {
           <Container fluid style={{ maxWidth: 1860 }}>
             <h1 className="title">Votre recherche</h1>
             {this.museo()}
-            <ReactiveBase url={`${es_url}`} app={bases}>
+            <ReactiveBase url={`${es_url}`} app={BASES}>
               <Row>
                 <div className={`search-filters ${this.state.mobile_menu}`}>
                   <aside className="search-sidebar">
                     <div
                       className="close_mobile_menu"
-                      onClick={() =>
-                        this.setState({ mobile_menu: "mobile_close" })
-                      }
+                      onClick={() => this.setState({ mobile_menu: "mobile_close" })}
                     >
                       x
                     </div>
@@ -208,8 +123,7 @@ class Search extends React.Component {
                       react={{ and: DEFAULT_FILTER.filter(e => e !== "base") }}
                       filterListItem={bucket =>
                         bucket.key !== "Photographies (Mémoires)" &&
-                        bucket.key !==
-                          "Inventaire patrimoine mobilier (Palissy)"
+                        bucket.key !== "Inventaire patrimoine mobilier (Palissy)"
                       }
                       onCollapseChange={changeActiveFilter}
                       location={location}
@@ -276,10 +190,7 @@ class Search extends React.Component {
                       URLParams={true}
                       showSearch={false}
                       defaultSelected={activeTab === "map" ? ["oui"] : []}
-                      data={[
-                        { label: "oui", value: "oui" },
-                        { label: "non", value: "non" }
-                      ]}
+                      data={[{ label: "oui", value: "oui" }, { label: "non", value: "non" }]}
                       onCollapseChange={changeActiveFilter}
                       location={location}
                     />
@@ -323,15 +234,7 @@ class Search extends React.Component {
                         <DataSearch
                           componentId="mainSearch"
                           filterLabel="Résultats pour "
-                          dataField={[
-                            "TICO",
-                            "TITR",
-                            "AUTP",
-                            "DENO",
-                            "AUTR",
-                            "AUTOR"
-                          ]}
-                          defaultSelected={this.state.defaultSelected}
+                          dataField={["TICO", "TITR", "AUTP", "DENO", "AUTR", "AUTOR"]}
                           iconPosition="left"
                           className="mainSearch"
                           placeholder="Saisissez un titre, une dénomination ou une localisation"
@@ -391,9 +294,7 @@ class Search extends React.Component {
                         />
                         <div
                           className="filter_mobile_menu"
-                          onClick={() =>
-                            this.setState({ mobile_menu: "mobile_open" })
-                          }
+                          onClick={() => this.setState({ mobile_menu: "mobile_open" })}
                         >
                           <SelectedFilters
                             render={props => {
@@ -415,15 +316,9 @@ class Search extends React.Component {
                                 >
                                   <img src="/static/filter.png" />
                                   <Badge color="secondary">
-                                    {Object.keys(selectedValues).reduce(
-                                      (acc, current) => {
-                                        return selectedValues[current].value !==
-                                          ""
-                                          ? acc + 1
-                                          : acc;
-                                      },
-                                      0
-                                    )}
+                                    {Object.keys(selectedValues).reduce((acc, current) => {
+                                      return selectedValues[current].value !== "" ? acc + 1 : acc;
+                                    }, 0)}
                                   </Badge>
                                 </div>
                               );
@@ -436,12 +331,8 @@ class Search extends React.Component {
                       <Nav pills>
                         <NavItem>
                           <NavLink
-                            className={classnames({
-                              active: activeTab === "list"
-                            })}
-                            onClick={() => {
-                              this.toggle("list");
-                            }}
+                            className={classnames({ active: activeTab === "list" })}
+                            onClick={() => this.toggle("list")}
                           >
                             LISTE
                           </NavLink>
@@ -475,11 +366,7 @@ class Search extends React.Component {
                       </Nav>
                     </Col>
                   </Row>
-                  <TabContent activeTab={activeTab}>
-                    <TabPane tabId="list"><List filter={DEFAULT_FILTER} /></TabPane>
-                    <TabPane tabId="map"><Map filter={DEFAULT_FILTER}  location={location} /></TabPane>
-                    <TabPane tabId="mosaic"><Mosaic filter={DEFAULT_FILTER} /></TabPane>
-                  </TabContent>
+                  {this.currentTab()}
                 </div>
               </Row>
             </ReactiveBase>
@@ -487,6 +374,16 @@ class Search extends React.Component {
         </div>
       </Layout>
     );
+  }
+
+  currentTab() {
+    if (this.props.display === "list") {
+      return <List filter={DEFAULT_FILTER} />;
+    } else if(this.props.display === "map") {
+      return <Map filter={DEFAULT_FILTER} location={this.props.location} />;
+    } else {
+      return <Mosaic filter={DEFAULT_FILTER} />;
+    }
   }
 }
 
