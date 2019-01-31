@@ -1,6 +1,7 @@
 import React from "react";
 import { Row, Col, Nav, NavItem, NavLink, Container, Badge } from "reactstrap";
 import Router from "next/router";
+import queryString from "query-string"
 import { ReactiveBase, DataSearch, SelectedFilters } from "@appbaseio/reactivesearch";
 import classnames from "classnames";
 import { MultiList } from "pop-shared";
@@ -76,7 +77,7 @@ class Search extends React.Component {
 
   museo() {
     const { location } = this.props;
-    const museo = null; //queryString.parse(location.search).museo;
+    const museo = queryString.parse(location.search).museo;
     if (museo) {
       return <MuseoCard museo={JSON.parse(museo)} />;
     }
